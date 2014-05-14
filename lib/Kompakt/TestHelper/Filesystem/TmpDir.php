@@ -9,9 +9,12 @@
 
 namespace Kompakt\TestHelper\Filesystem;
 
+use Kompakt\TestHelper\Filesystem\Exception\InvalidArgumentException;
+
 class TmpDir
 {
     protected $tmpDir = null;
+    protected $illegalCharsPattern = '/[^a-z0-9\.\-\/_]/i';
 
     public function __construct($tmpDir)
     {
@@ -39,7 +42,7 @@ class TmpDir
     {
         $subDirPart = preg_replace('/::/', '/', $subDirPart); // if used with __METHOD__
         $subDirPart = preg_replace('/\\\/', '/', $subDirPart); // if used with __CLASS__
-        $subDirPart = preg_replace('/[^a-z0-9\.\-\/_]/i', '', $subDirPart); // remove illegal stuff
+        $subDirPart = preg_replace($this->illegalCharsPattern, '', $subDirPart); // remove illegal stuff
         return sprintf('%s/%s', $this->tmpDir, $subDirPart);
     }
 
@@ -51,7 +54,11 @@ class TmpDir
 
     public function makeSubDir($pathname)
     {
-        $this->checkSubDir($pathname);
+        if (!$this->isValidSubDir($pathname))
+        {
+            throw new InvalidArgumentException(sprintf('Not a valid subdir of temporary dir: "%s"', $pathname));
+        }
+
         $fileInfo = new \SplFileInfo($pathname);
 
         if (!$fileInfo->isDir())
@@ -64,7 +71,11 @@ class TmpDir
 
     public function deleteSubDir($pathname)
     {
-        $this->checkSubDir($pathname);
+        if (!$this->isValidSubDir($pathname))
+        {
+            throw new InvalidArgumentException(sprintf('Not a valid subdir of temporary dir: "%s"', $pathname));
+        }
+
         $fileInfo = new \SplFileInfo($pathname);
 
         if (!$fileInfo->isDir() || !$fileInfo->isReadable() || !$fileInfo->isWritable())
@@ -115,7 +126,7 @@ class TmpDir
         }
     }
 
-    protected function checkSubDir($pathname)
+    public function isValidSubDir($pathname)
     {
         $pathname = rtrim($pathname, '/');
         $tmpDir = rtrim($this->tmpDir, '/');
@@ -123,12 +134,19 @@ class TmpDir
 
         if ($pathname === $tmpDir)
         {
-            throw new InvalidArgumentException(sprintf('Not a subdir of temporary dir: "%s"', $tmpDir));
+            return false;
         }
 
         if (!preg_match($find, $pathname))
         {
-            throw new InvalidArgumentException(sprintf('Not a subdir of temporary dir: "%s"', $tmpDir));
+            return false;
         }
+
+        if (preg_match($this->illegalCharsPattern, $pathname))
+        {
+            return false;
+        }
+
+        return true;
     }
 }
