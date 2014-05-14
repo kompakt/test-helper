@@ -18,6 +18,7 @@ class TmpDir
 
     public function __construct($tmpDir)
     {
+        $tmpDir = rtrim($tmpDir, '/');
         $info = new \SplFileInfo($tmpDir);
 
         if (!$info->isDir())
@@ -38,12 +39,12 @@ class TmpDir
         $this->tmpDir = $tmpDir;
     }
 
-    public function preparePathname($subDirPart)
+    public function preparePathname($subDir)
     {
-        $subDirPart = preg_replace('/::/', '/', $subDirPart); // if used with __METHOD__
-        $subDirPart = preg_replace('/\\\/', '/', $subDirPart); // if used with __CLASS__
-        $subDirPart = preg_replace($this->illegalCharsPattern, '', $subDirPart); // remove illegal stuff
-        return sprintf('%s/%s', $this->tmpDir, $subDirPart);
+        $subDir = preg_replace('/::/', '/', $subDir); // if used with __METHOD__
+        $subDir = preg_replace('/\\\/', '/', $subDir); // if used with __CLASS__
+        $subDir = preg_replace($this->illegalCharsPattern, '', $subDir); // remove illegal stuff
+        return trim($subDir, '/');
     }
 
     public function replaceSubDir($pathname)
@@ -52,11 +53,13 @@ class TmpDir
         $this->makeSubDir($pathname);
     }
 
-    public function makeSubDir($pathname)
+    public function makeSubDir($subDir)
     {
+        $pathname = $this->getPathname($subDir);
+
         if (!$this->isValidSubDir($pathname))
         {
-            throw new InvalidArgumentException(sprintf('Not a valid subdir of temporary dir: "%s"', $pathname));
+            throw new InvalidArgumentException(sprintf('Not a valid subDir of temporary dir: "%s"', $pathname));
         }
 
         $fileInfo = new \SplFileInfo($pathname);
@@ -69,11 +72,13 @@ class TmpDir
         return $pathname;
     }
 
-    public function deleteSubDir($pathname)
+    public function deleteSubDir($subDir)
     {
+        $pathname = $this->getPathname($subDir);
+
         if (!$this->isValidSubDir($pathname))
         {
-            throw new InvalidArgumentException(sprintf('Not a valid subdir of temporary dir: "%s"', $pathname));
+            throw new InvalidArgumentException(sprintf('Not a valid subDir of temporary dir: "%s"', $pathname));
         }
 
         $fileInfo = new \SplFileInfo($pathname);
@@ -92,7 +97,7 @@ class TmpDir
 
             if ($fileInfo->isDir())
             {
-                $this->deleteSubDir($fileInfo->getPathname());
+                $this->deleteSubDir($this->getSubDir($fileInfo->getPathname()));
             }
             else {
                 unlink($fileInfo->getPathname());
@@ -118,7 +123,7 @@ class TmpDir
 
             if ($fileInfo->isDir())
             {
-                $this->deleteSubDir($fileInfo->getPathname());
+                $this->deleteSubDir($fileInfo->getFilename());
             }
             else {
                 unlink($fileInfo->getPathname());
@@ -126,7 +131,7 @@ class TmpDir
         }
     }
 
-    public function isValidSubDir($pathname)
+    protected function isValidSubDir($pathname)
     {
         $pathname = rtrim($pathname, '/');
         $tmpDir = rtrim($this->tmpDir, '/');
@@ -148,5 +153,17 @@ class TmpDir
         }
 
         return true;
+    }
+
+    protected function getPathname($subDir)
+    {
+        return sprintf('%s/%s', $this->tmpDir, ltrim($subDir, '/'));
+    }
+
+    protected function getSubDir($pathname)
+    {
+        $tmpDir = str_replace('/', '\/', $this->tmpDir);
+        $subDir = preg_replace(sprintf('/%s/', $tmpDir), '', $pathname);
+        return ltrim($subDir, '/');
     }
 }

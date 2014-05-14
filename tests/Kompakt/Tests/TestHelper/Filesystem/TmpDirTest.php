@@ -18,7 +18,7 @@ class TmpDirTest extends \PHPUnit_Framework_TestCase
         $tmpDir = $this->getTmpDir();
         $this->assertRegExp('/\/TmpDirTest$/', $tmpDir->preparePathname(__CLASS__));
         $this->assertRegExp('/\/testPreparePathname$/', $tmpDir->preparePathname(__METHOD__));
-        $this->assertRegExp('/\/AAA$/', $tmpDir->preparePathname('AAA+"*ç%&()=^üèöéäà$£'));
+        $this->assertRegExp('//', $tmpDir->preparePathname('+"*ç%&()=^üèöéäà$£'));
     }
 
     public function testMakeSubDir()
@@ -27,8 +27,8 @@ class TmpDirTest extends \PHPUnit_Framework_TestCase
         $tmpDir->clear();
         $subDir = $tmpDir->preparePathname('make-subdir-test');
 
-        $tmpDir->makeSubDir($subDir);
-        $this->assertFileExists($subDir);
+        $pathname = $tmpDir->makeSubDir($subDir);
+        $this->assertFileExists($pathname);
     }
 
     public function testDeleteSubDir()
@@ -37,10 +37,11 @@ class TmpDirTest extends \PHPUnit_Framework_TestCase
         $tmpDir->clear();
         $subDir = $tmpDir->preparePathname('delete-subdir-test');
 
-        $tmpDir->makeSubDir($subDir);
-        $this->assertFileExists($subDir);
+        $pathname = $tmpDir->makeSubDir($subDir);
+        $this->assertFileExists($pathname);
+
         $tmpDir->deleteSubDir($subDir);
-        $this->assertFalse(is_dir($subDir));
+        $this->assertFalse(is_dir($pathname));
     }
 
     public function testClear()
@@ -49,11 +50,11 @@ class TmpDirTest extends \PHPUnit_Framework_TestCase
         $tmpDir->clear();
         $subDir = $tmpDir->preparePathname('clear-test');
 
-        $tmpDir->makeSubDir($subDir);
-        $this->assertFileExists($subDir);
+        $pathname = $tmpDir->makeSubDir($subDir);
+        $this->assertFileExists($pathname);
 
         $tmpDir->clear();
-        $this->assertFalse(is_dir($subDir));
+        $this->assertFalse(is_dir($pathname));
     }
 
     protected function getTmpDir()
