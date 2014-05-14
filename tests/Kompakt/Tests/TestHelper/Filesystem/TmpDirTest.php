@@ -13,19 +13,19 @@ use Kompakt\TestHelper\Filesystem\TmpDir;
 
 class TmpDirTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPreparePathname()
+    public function testPrepareSubDirPath()
     {
         $tmpDir = $this->getTmpDir();
-        $this->assertRegExp('/\/TmpDirTest$/', $tmpDir->preparePathname(__CLASS__));
-        $this->assertRegExp('/\/testPreparePathname$/', $tmpDir->preparePathname(__METHOD__));
-        $this->assertRegExp('//', $tmpDir->preparePathname('+"*ç%&()=^üèöéäà$£'));
+        $this->assertRegExp('/\/TmpDirTest$/', $tmpDir->prepareSubDirPath(__CLASS__));
+        $this->assertRegExp('/\/testPrepareSubDirPath$/', $tmpDir->prepareSubDirPath(__METHOD__));
+        $this->assertRegExp('//', $tmpDir->prepareSubDirPath('+"*ç%&()=^üèöéäà$£'));
     }
 
     public function testMakeSubDir()
     {
         $tmpDir = $this->getTmpDir();
         $tmpDir->clear();
-        $subDir = $tmpDir->preparePathname('make-subdir-test');
+        $subDir = $tmpDir->prepareSubDirPath('make-subdir-test');
 
         $pathname = $tmpDir->makeSubDir($subDir);
         $this->assertFileExists($pathname);
@@ -35,7 +35,7 @@ class TmpDirTest extends \PHPUnit_Framework_TestCase
     {
         $tmpDir = $this->getTmpDir();
         $tmpDir->clear();
-        $subDir = $tmpDir->preparePathname('delete-subdir-test');
+        $subDir = $tmpDir->prepareSubDirPath('delete-subdir-test');
 
         $pathname = $tmpDir->makeSubDir($subDir);
         $this->assertFileExists($pathname);
@@ -48,7 +48,7 @@ class TmpDirTest extends \PHPUnit_Framework_TestCase
     {
         $tmpDir = $this->getTmpDir();
         $tmpDir->clear();
-        $subDir = $tmpDir->preparePathname('clear-test');
+        $subDir = $tmpDir->prepareSubDirPath('clear-test');
 
         $pathname = $tmpDir->makeSubDir($subDir);
         $this->assertFileExists($pathname);

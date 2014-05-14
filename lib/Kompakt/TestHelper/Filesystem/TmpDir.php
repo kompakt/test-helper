@@ -39,7 +39,7 @@ class TmpDir
         $this->tmpDir = $tmpDir;
     }
 
-    public function preparePathname($subDir)
+    public function prepareSubDirPath($subDir)
     {
         $subDir = preg_replace('/::/', '/', $subDir); // if used with __METHOD__
         $subDir = preg_replace('/\\\/', '/', $subDir); // if used with __CLASS__
@@ -47,10 +47,10 @@ class TmpDir
         return trim($subDir, '/');
     }
 
-    public function replaceSubDir($pathname)
+    public function replaceSubDir($subDir)
     {
-        $this->deleteSubDir($pathname);
-        $this->makeSubDir($pathname);
+        $this->deleteSubDir($subDir);
+        return $this->makeSubDir($subDir);
     }
 
     public function makeSubDir($subDir)
