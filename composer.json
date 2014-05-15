@@ -3,6 +3,7 @@
     "type": "library",
     "description": "Little helpers for testing",
     "keywords": ["testing"],
+    "license": "MIT",
     "authors": [
         { "name": "Christian Hoegl", "email": "chrigu@sirprize.me" }
     ],
