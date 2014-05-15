@@ -17,4 +17,4 @@ Little helpers for testing
 
 ## License
 
-See LICENSE.
+kompakt/test-helper is licensed under the MIT license - see the LICENSE file for details
