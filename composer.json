@@ -13,9 +13,6 @@
     "require-dev": {
         "phpunit/phpunit": "4.1.*"
     },
-    "repositories": [
-        { "type": "vcs", "url":  "git@github-kompakt:kompakt/test-helper.git" }
-    ],
     "autoload": {
         "psr-0": { "Kompakt\\TestHelper": "lib/" }
     }
