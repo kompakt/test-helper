@@ -23,7 +23,7 @@ class TmpDirTest extends \PHPUnit_Framework_TestCase
     {
         $tmpDir = getTmpDir();
         $tmpDir->clear();
-        $subDir = $tmpDir->prepareSubDirPath('make-subdir-test');
+        $subDir = $tmpDir->prepareSubDirPath(__METHOD__);
 
         $pathname = $tmpDir->makeSubDir($subDir);
         $this->assertFileExists($pathname);
@@ -33,7 +33,7 @@ class TmpDirTest extends \PHPUnit_Framework_TestCase
     {
         $tmpDir = getTmpDir();
         $tmpDir->clear();
-        $subDir = $tmpDir->prepareSubDirPath('delete-subdir-test');
+        $subDir = $tmpDir->prepareSubDirPath(__METHOD__);
 
         $pathname = $tmpDir->makeSubDir($subDir);
         $this->assertFileExists($pathname);
@@ -46,7 +46,7 @@ class TmpDirTest extends \PHPUnit_Framework_TestCase
     {
         $tmpDir = getTmpDir();
         $tmpDir->clear();
-        $subDir = $tmpDir->prepareSubDirPath('clear-test');
+        $subDir = $tmpDir->prepareSubDirPath(__METHOD__);
 
         $pathname = $tmpDir->makeSubDir($subDir);
         $this->assertFileExists($pathname);

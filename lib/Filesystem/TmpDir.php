@@ -14,9 +14,10 @@ use Kompakt\TestHelper\Filesystem\Exception\InvalidArgumentException;
 class TmpDir
 {
     protected $tmpDir = null;
+    protected $namespacePrefix = '';
     protected $illegalCharsPattern = '/[^a-z0-9\.\-\/_]/i';
 
-    public function __construct($tmpDir)
+    public function __construct($tmpDir, $namespacePrefix = '')
     {
         $tmpDir = rtrim($tmpDir, '/');
         $info = new \SplFileInfo($tmpDir);
@@ -37,10 +38,12 @@ class TmpDir
         }
 
         $this->tmpDir = $tmpDir;
+        $this->namespacePrefix = $namespacePrefix;
     }
 
     public function prepareSubDirPath($subDir)
     {
+        $subDir = str_replace($this->namespacePrefix, '', $subDir);
         $subDir = preg_replace('/::/', '/', $subDir); // if used with __METHOD__
         $subDir = preg_replace('/\\\/', '/', $subDir); // if used with __CLASS__
         $subDir = preg_replace($this->illegalCharsPattern, '', $subDir); // remove illegal stuff

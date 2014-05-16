@@ -18,5 +18,5 @@ use Kompakt\TestHelper\Filesystem\TmpDir;
 
 function getTmpDir()
 {
-    return new TmpDir(TESTS_KOMPAKT_TESTHELPER_TEMP_DIR);
+    return new TmpDir(TESTS_KOMPAKT_TESTHELPER_TEMP_DIR, 'Kompakt\TestHelper\Tests');
 }
