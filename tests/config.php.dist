@@ -7,4 +7,4 @@
  *
  */
 
-define('TESTS_KOMPAKT_TESTHELPER_TEMP_DIR', __DIR__ . '/_temp');
+define('TESTS_KOMPAKT_TESTHELPER_TEMP_DIR', __DIR__ . '/temp');
