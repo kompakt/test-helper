@@ -15,5 +15,10 @@
     },
     "autoload": {
         "psr-4": { "Kompakt\\TestHelper\\": "lib/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
     }
 }
