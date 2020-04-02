@@ -9,7 +9,9 @@
 
 namespace Kompakt\TestHelper\Tests\Filesystem;
 
-class TmpDirTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class TmpDirTest extends TestCase
 {
     public function testPrepareSubDirPath()
     {
