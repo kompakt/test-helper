@@ -16,9 +16,9 @@ class TmpDirTest extends TestCase
     public function testPrepareSubDirPath()
     {
         $tmpDir = getTmpDir();
-        $this->assertRegExp('/\/TmpDirTest$/', $tmpDir->prepareSubDirPath(__CLASS__));
-        $this->assertRegExp('/\/testPrepareSubDirPath$/', $tmpDir->prepareSubDirPath(__METHOD__));
-        $this->assertRegExp('//', $tmpDir->prepareSubDirPath('+"*ç%&()=^üèöéäà$£'));
+        $this->assertMatchesRegularExpression('/\/TmpDirTest$/', $tmpDir->prepareSubDirPath(__CLASS__));
+        $this->assertMatchesRegularExpression('/\/testPrepareSubDirPath$/', $tmpDir->prepareSubDirPath(__METHOD__));
+        $this->assertMatchesRegularExpression('//', $tmpDir->prepareSubDirPath('+"*ç%&()=^üèöéäà$£'));
     }
 
     public function testMakeSubDir()
